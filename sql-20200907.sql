@@ -64,6 +64,38 @@ create table tb_item (
 예약 테이블을 어떻게 해야할지 잘 모르겠어요..
 예를 들면 예약 가능 일자, 예약 가능 시간, 예약 가능 시간에 가능한 인원수
 어떻게 해야하나요..
+
+--> 
+예약 정보 테이블에는
+(id, 상호명, 예약 가능 요일, 예약 가능 시간, 예약 기간   )
+실제 예약 테이블에는
+id, 예약자 id, 에약 날짜, 예약 정보 (위의 예약 정보테이블 foreign key)
 */
+
+/*
+시간당 예약 가능 수, 실제 예약 수, 예약 가능 여부
+예를 들면 
+이 가맹점은 최대 4명 밖에 못들어오고 최대 1시간 30분만 이용할 수 있다.
+근데 한번에 9시에 4명이 예약했으면 
+9:00/9:30/10:00/10:30 선택 란을 막아야 하는건가?
+그건 어떻게 테이블을 짜야할지 고민되요!
+*/
+create table tb_resve_info (
+	resve_info_id bigint not null auto_increment primary key,
+    item_id bigint not null,
+    resve_info_day varchar(225),
+    resve_info_time varchar(225),
+    regist_dt datetime not null,
+    updt_dt datetime not null,
+    constraint tb_resve_info_fk1 foreign key(item_id) references tb_item(item_id)
+);
+
+create table tb_resve (
+	resve_id bigint not null auto_increment primary key,
+    member_id varchar(225) not null, 
+    resve_info_id bigint not null,
+    constraint tb_resve_fk1 foreign key(member_id) references tb_member(member_id),
+    constraint tb_resve_fk2 foreign key(resve_info_id) references tb_resve_info(resve_info_id)
+)
 
 
